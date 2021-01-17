@@ -25,11 +25,13 @@ logging.basicConfig(level=logging.DEBUG)
 TRAINING_DATA_PATH = 'images'
 
 CHECKPOINTS_DIR_PATH = 'checkpoints'
-CHECKPOINT_PATH = os.path.join(CHECKPOINTS_DIR_PATH, 'conv_autoencoder_weights')
+CHECKPOINTS_PATH = os.path.join(CHECKPOINTS_DIR_PATH, 'conv_autoencoder_weights')
 
 IMAGE_INPUT_SIZE = (256, 256)
 BATCH_SIZE = 16
+EPOCHS=2
 
+TENSORBOARD_LOG_DIR="tflearn_logs"
 
 # functions
 def load_data():
@@ -82,11 +84,10 @@ def main():
     conv_autencoder = build_model()
 
     logging.info('training')
-    model = tflearn.DNN(conv_autencoder, tensorboard_verbose=3)
-    model.fit(X, X, n_epoch=20, shuffle=True, show_metric=True,
+    model = tflearn.DNN(conv_autencoder, tensorboard_verbose=3, tensorboard_dir=TENSORBOARD_LOG_DIR, checkpoint_path=CHECKPOINTS_PATH)
+    model.fit(X, X, n_epoch=EPOCHS, shuffle=True, show_metric=True,
               batch_size=BATCH_SIZE, validation_set=0.1, snapshot_epoch=True,
-              run_id='selfie_conv_autoencoder',
-              checkpoint_path=CHECKPOINTS_PATH)
+              run_id='selfie_conv_autoencoder')
 
 
 if __name__ == '__main__':
